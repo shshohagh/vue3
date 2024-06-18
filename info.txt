@@ -1,0 +1,5 @@
+npm create vue@latest
+    npm install
+    npm run dev
+npm install bootstrap@5.3.3
+npm install axios
