@@ -5,7 +5,6 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <header>
-
     <div class="wrapper">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
@@ -22,7 +21,7 @@ import HelloWorld from './components/HelloWorld.vue'
               <RouterLink class="nav-link" to="/about">About Us</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/students">Students</RouterLink>
+              <RouterLink class="nav-link" to="/users">Users</RouterLink>
             </li>
           </ul>
          
@@ -31,7 +30,6 @@ import HelloWorld from './components/HelloWorld.vue'
     </nav>
     </div>
   </header>
-
   <RouterView />
 </template>
 
