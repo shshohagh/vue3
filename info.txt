@@ -3,3 +3,5 @@ npm create vue@latest
     npm run dev
 npm install bootstrap@5.3.3
 npm install axios
+
+https://www.youtube.com/watch?v=0tlOhXtBKnc&list=PLRheCL1cXHrvCyj_RucTn4Bki_4NvT9Sp&index=4
