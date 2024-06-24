@@ -1,14 +1,14 @@
 <template>
-    <div class="container">
+    <div class="container mt-5">
         <div class="card">
             <div class="card-header">
-                <h4>
+                <h4 class="">
                     Users
-                    <RouterLink to="/users/create" class="btn btn-primary float-end">Add User</RouterLink>
+                    <RouterLink to="/users/create" class="btn btn-outline-primary btn-sm float-end">Add User</RouterLink>
                 </h4>
             </div>
-            <div class="card-body">
-                <table class="table table-bordered">
+            <div class="card-body p-0">
+                <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th class="text-center">ID</th>
@@ -24,14 +24,16 @@
                             <td class="text-left">{{ user.email }}</td>
                             <td class="">
                                 <table class="">
-                                    <tr>
-                                        <td> 
-                                            <RouterLink to="/" class="btn btn-outline-primary btn-sm">
+                                    <tr class="">
+                                        <td class="pe-2"> 
+                                            <RouterLink :to="{ path: '/users/'+user.id+'/edit' }" class="btn btn-outline-primary btn-sm">
                                                 Edit
                                             </RouterLink>
                                         </td>
-                                        <td>
-                                            <button type="button" class="btn btn-outline-danger btn-sm">
+                                        <td class="pe-2">
+                                            <button type="button" 
+                                            @click="deleteUser(user.id)" 
+                                            class="btn btn-outline-danger btn-sm">
                                                 Delete
                                             </button>
                                         </td>
@@ -69,13 +71,29 @@ export default {
 
             axios.get('http://127.0.0.1:8000/api/users')
             .then(res => {
-                this.users = res.data.data;
+                this.users = res.data.users;
             })
-
             .catch(error => {
                     console.log('Error fetching users:', error);
             });
 
+        },
+        deleteUser(userId){
+            if(confirm('Are you sure, you want to delete this data?')){
+                axios.delete(`http://127.0.0.1:8000/api/users/${userId}`)
+                .then(res => {
+                    console.log(res)
+                    alert(res.data.message);
+                    this.getUsers();
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if(error.response.status == 404){
+                            alert(error.response.data.message);
+                        }
+                    }
+                });
+            }
         }
     },
 }

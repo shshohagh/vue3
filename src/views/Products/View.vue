@@ -1,14 +1,14 @@
 <template>
-    <div class="container">
+    <div class="container mt-5">
         <div class="card">
             <div class="card-header">
                 <h4>
                     Products
-                    <RouterLink to="/products/create" class="btn btn-primary float-end">Add Product</RouterLink>
+                    <RouterLink to="/products/create" class="btn btn-outline-primary btn-sm float-end">Add Product</RouterLink>
                 </h4>
             </div>
-            <div class="card-body">
-                <table class="table table-bordered">
+            <div class="card-body p-0">
+                <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th class="text-center">ID</th>
@@ -34,7 +34,7 @@
                             <td class="text-left">
                                 {{ product.rating }}<br>
                                 {{ product.href.review }}<br>
-                                <RouterLink to="/products/reviews/create" class="btn btn-primary btn-sm">Add Review</RouterLink>
+                                <RouterLink to="/products/reviews/create" class="btn btn-outline-primary btn-sm">Add Review</RouterLink>
                                 
                             </td>
                             <td class="">
@@ -46,7 +46,9 @@
                                             </RouterLink>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-outline-danger btn-sm">
+                                            <button type="button" 
+                                            @click="deleteProduct(product.id)"
+                                            class="btn btn-outline-danger btn-sm">
                                                 Delete
                                             </button>
                                         </td>
@@ -91,6 +93,23 @@ export default {
                     console.log('Error fetching products:', error);
             });
 
+        },
+        deleteProduct(productId){
+            if(confirm('Are you sure, you want to delete this data?')){
+                axios.delete(`http://127.0.0.1:8000/api/products/${productId}`)
+                .then(res => {
+                    console.log(res)
+                    alert(res.data.message);
+                    this.getproducts();
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if(error.response.status == 404){
+                            alert(error.response.data.message);
+                        }
+                    }
+                });
+            }
         }
     },
 }

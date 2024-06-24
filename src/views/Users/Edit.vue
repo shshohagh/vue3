@@ -2,9 +2,9 @@
     <div class="container mt-5">
         <div class="card">
             <div class="card-header">
-                <h4 class="text-primary">
-                    Add User
-                    <RouterLink to="/users" class="btn btn-outline-primary btn-sm float-end">All Users</RouterLink>
+                <h4>
+                    Edit User
+                    <RouterLink to="/users" class="btn btn-primary float-end">All Users</RouterLink>
                 </h4>
             </div>
             <div class="card-body">
@@ -26,7 +26,7 @@
                     <input type="password" v-model="model.user.password" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <button type="button" @click="saveUser" class="btn btn-primary">Save</button>
+                    <button type="button" @click="updateUser" class="btn btn-primary">Update</button>
                 </div>
 
             </div>
@@ -37,9 +37,10 @@
 <script>
     import axios from 'axios';
     export default {
-        name: 'userCreate',
+        name: 'userEdit',
         data() {
             return {
+                userId: '',
                 errorList: '',
                 model: {
                     user: {
@@ -50,18 +51,30 @@
                 }
             }
         },
-
+        mounted(){
+            this.getUser(this.$route.params.id);
+            this.userId = this.$route.params.id;
+        },
         methods: {
-            saveUser(){
-                axios.post('http://127.0.0.1:8000/api/users',this.model.user)
+             getUser(userId){
+                axios.get(`http://127.0.0.1:8000/api/users/${userId}`)
+                .then(res => {
+                    this.model.user = res.data.user
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if(error.response.status == 404){
+                            alert(error.response.data.message);
+                        }
+                    }
+                });
+
+            },
+            updateUser(){
+                axios.put(`http://127.0.0.1:8000/api/users/${this.userId}`, this.model.user)
                 .then(res => {
                     console.log(res)
                     alert(res.data.message);
-                    this.model.user = {
-                        name: '',
-                        email: '',
-                        password: '',
-                    }
                     this.errorList ='';
                     this.$router.push({ path: '/users' });
                 })
@@ -70,13 +83,9 @@
                         if(error.response.status == 422){
                             this.errorList = error.response.data.errors;
                         }
-                        if(error.response.status == 500){
+                        if(error.response.status == 404){
                             alert(error.response.data.message);
                         }
-
-                        /* console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers); */
                     } else if (error.request) {
                         console.log(error.request);
                     } else {

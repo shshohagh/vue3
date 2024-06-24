@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container mt-5">
         <div class="card">
             <div class="card-header">
                 <h4>
@@ -75,6 +75,7 @@
                         discount: '',
                     }
                     this.errorList ='';
+                    this.$router.push({ path: '/products' });
                 })
                 .catch(function (error) {
                     if (error.response) {

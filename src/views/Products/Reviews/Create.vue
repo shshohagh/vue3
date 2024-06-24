@@ -68,6 +68,7 @@
                         star: '',
                     }
                     this.errorList ='';
+                    this.$router.push({ path: '/products' });
                 })
                 .catch(function (error) {
                     if (error.response) {
