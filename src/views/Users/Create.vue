@@ -8,9 +8,11 @@
                 </h4>
             </div>
             <div class="card-body">
-                <ul class="alert alert-warning" v-if="Object.keys(this.errorList).length > 0">
-                    <li class="mb-0 ms-3" v-for="(error, index) in this.errorList" :key="index">
-                        {{ error[0] }}
+                <ul class="alert alert-warning" v-if="Object.keys(errorList).length > 0">
+                    <li class="mb-0 ms-3" v-for="(errors, field) in errorList" :key="field">
+                        <div v-for="(error, index) in errors" :key="index">
+                            {{ error }}
+                        </div>
                     </li>
                 </ul>
                 <div class="mb-3">
@@ -40,7 +42,7 @@
         name: 'userCreate',
         data() {
             return {
-                errorList: '',
+                errorList: {},
                 model: {
                     user: {
                         name: '',
@@ -62,12 +64,13 @@
                         email: '',
                         password: '',
                     }
-                    this.errorList ='';
+                    this.errorList ={};
                     this.$router.push({ path: '/users' });
                 })
-                .catch(function (error) {
+                .catch(error => {
                     if (error.response) {
                         if(error.response.status == 422){
+                            console.log(error.response.data.errors);
                             this.errorList = error.response.data.errors;
                         }
                         if(error.response.status == 500){

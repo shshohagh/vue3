@@ -54,15 +54,35 @@
                                         </td>
                                     </tr>
                                 </table>
-                               
-                                
                             </td>
                         </tr>
                     </tbody>
                     <tbody v-else>
                         <tr><td colspan="4" class="text-center">Loading..</td></tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9">
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" :class="{ disabled: !pagination.prev }">
+                            <a class="page-link" href="#" @click.prevent="getproducts(pagination.prev)">Previous</a>
+                        </li>
+                        
+                        <li class="page-item" v-for="page in pagination.links" :key="page.label" :class="{ active: page.active }">
+                            <a class="page-link" href="#" @click.prevent="page.url && getproducts(page.url)">{{ page.label }}</a>
+                        </li>
+
+                        <li class="page-item" :class="{ disabled: !pagination.next }">
+                            <a class="page-link" href="#" @click.prevent="getproducts(pagination.next)">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
+
             </div>
         </div>
     </div>
@@ -75,7 +95,12 @@ export default {
     name: 'products',
     data(){
         return {
-            products: []
+            products: [],
+            pagination: {
+                prev: null,
+                next: null,
+                links: []
+            }
         }
     },
     mounted() {
@@ -87,6 +112,9 @@ export default {
             axios.get('http://127.0.0.1:8000/api/products')
             .then(res => {
                 this.products = res.data.data;
+                this.pagination.prev = res.data.links.prev;
+                this.pagination.next = res.data.links.next;
+                this.pagination.links = res.data.meta.links;
             })
 
             .catch(error => {

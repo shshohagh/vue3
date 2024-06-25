@@ -77,7 +77,7 @@
                     this.errorList ='';
                     this.$router.push({ path: '/products' });
                 })
-                .catch(function (error) {
+                .catch(error => {
                     if (error.response) {
                         if(error.response.status == 422){
                             this.errorList = error.response.data.errors;
